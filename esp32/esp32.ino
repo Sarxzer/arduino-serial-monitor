@@ -21,39 +21,26 @@ void loop() {
   u8g2.print("Waiting for data...");
   if (Serial.available()) {
     String data = Serial.readString();
-    if (data.indexOf("INFO:") != -1) { // Wait for the start of the serial data (INFO:)
-
-      // Extract CPU, Memory, GPU, and Temperature information from the serial data
-      String cpuInfo = data.substring(data.indexOf("CPU:") + 4, data.indexOf(",MEM_RAW:"));
-      String memInfo = data.substring(data.indexOf("MEM_RAW:") + 8, data.indexOf(",MEM_TOTAL:"));
-      String memTotalInfo = data.substring(data.indexOf("MEM_TOTAL:") + 10, data.indexOf(",GPU:"));
-      String gpuInfo = data.substring(data.indexOf("GPU:") + 4, data.indexOf(",TEMP:"));
-      String tempInfo = data.substring(data.indexOf("TEMP:") + 5, data.indexOf(",TIME:"));
-      String timeInfo = data.substring(data.indexOf("TIME:") + 5, data.indexOf(",VOL:"));
-      String volInfo = data.substring(data.indexOf("VOL:") + 4);
-
-      // Display CPU, Memory, GPU, and Temperature information on the OLED screen
-      u8g2.clearBuffer();
-      u8g2.setCursor(0, 10);
-      u8g2.print("CPU:" + cpuInfo + "%");
-      u8g2.setCursor(0, 25);
-      u8g2.print("MEM:" + memInfo + "GB/" + memTotalInfo + "GB");
-      u8g2.setCursor(0, 40);
-      u8g2.print("GPU:" + gpuInfo + "%" + " TEMP:" + tempInfo + "°C");
-      u8g2.setCursor(0, 64);
-      u8g2.print(timeInfo);
-      u8g2.setCursor(64, 64);
-      u8g2.print("VOL:" + volInfo + "%");
-      u8g2.sendBuffer();
-    } else if (data.indexOf("DISPLAY_OFF") != -1) { // Clear the OLED screen
-      u8g2.clearBuffer();
-      u8g2.sendBuffer();
-    } else if (data.indexOf("REBOOT") != -1) { // Reboot the ESP32
-      ESP.restart();
-    } else if (data.indexOf("SHUTDOWN") != -1) { // Shutdown the ESP32
-      esp_deep_sleep_start();
-    } else {
-      Serial.println("Invalid command");
-    }
+    // Extract CPU, Memory, GPU, and Temperature information from the serial data
+    String cpuInfo = data.substring(data.indexOf("CPU:") + 4, data.indexOf(",MEM_RAW:"));
+    String memInfo = data.substring(data.indexOf("MEM_RAW:") + 8, data.indexOf(",MEM_TOTAL:"));
+    String memTotalInfo = data.substring(data.indexOf("MEM_TOTAL:") + 10, data.indexOf(",GPU:"));
+    String gpuInfo = data.substring(data.indexOf("GPU:") + 4, data.indexOf(",TEMP:"));
+    String tempInfo = data.substring(data.indexOf("TEMP:") + 5, data.indexOf(",TIME:"));
+    String timeInfo = data.substring(data.indexOf("TIME:") + 5, data.indexOf(",VOL:"));
+    String volInfo = data.substring(data.indexOf("VOL:") + 4);
+    // Display CPU, Memory, GPU, and Temperature information on the OLED screen
+    u8g2.clearBuffer();
+    u8g2.setCursor(0, 10);
+    u8g2.print("CPU:" + cpuInfo + "%");
+    u8g2.setCursor(0, 25);
+    u8g2.print("MEM:" + memInfo + "GB/" + memTotalInfo + "GB");
+    u8g2.setCursor(0, 40);
+    u8g2.print("GPU:" + gpuInfo + "%" + " TEMP:" + tempInfo + "°C");
+    u8g2.setCursor(0, 64);
+    u8g2.print(timeInfo);
+    u8g2.setCursor(64, 64);
+    u8g2.print("VOL:" + volInfo + "%");
+    u8g2.sendBuffer();
   }
 }
